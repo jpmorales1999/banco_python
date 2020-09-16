@@ -25,26 +25,33 @@ class Acciones:
 
     def proximasAcciones(self, usuario):
 
-        print("""
-            Bienvenido a Mundo Banco!!! \n
-            Acciones Disponibles:
-                1. Consultar Cuenta
-                2. Depositar Saldo
-                3. Realizar Consignación
-                4. Retirar Saldo
-                5. Salir
-        """) 
+            print("""
+                Bienvenido a Mundo Banco!!! \n
+                Acciones Disponibles:
+                    1. Consultar Cuenta
+                    2. Depositar Saldo
+                    3. Realizar Transferencia
+                    4. Retirar Saldo
+                    5. Consultar Saldo
+                    6. Consultar Movimientos
+                    7. Salir
+            """) 
 
-        accion = int(input("¿Qué quieres hacer?: "))
+            accion = 1
 
-        objeto = accionesTransacciones.Acciones(usuario)
+            objeto = accionesTransacciones.Acciones(usuario)
 
-        if accion == 1:
-            objeto.consultar(usuario)
-        elif accion == 2:
-            objeto.depositar(usuario)
-        elif accion == 4:
-            objeto.retirar(usuario)
-
+            while accion != 6:
+                accion = int(input("¿Qué quieres hacer?: "))
+                if accion == 1:
+                    objeto.consultar(usuario)
+                elif accion == 2:
+                    objeto.depositar(usuario)
+                elif accion == 4:
+                    objeto.retirar(usuario)
+                elif accion == 5:
+                    print(f'\nCuentas con un saldo total de {usuario[5]}')
+                elif accion == 6:
+                    objeto.movimientos(usuario)
 
         

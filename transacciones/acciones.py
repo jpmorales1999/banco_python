@@ -16,15 +16,33 @@ class Acciones:
         print(f"Id de la Cuenta: $ {usuario[6]}")
         print("******************************************")
 
-    def proximasAcciones(self, cuenta_id, tipo, valor):
-        if tipo == 3:
-            print(f"\nVamos a depositar en tu cuenta $ {valor}")
-            deposito = objeto.depositar(cuenta_id, tipo, valor)
-            if deposito[0] >= 1:
-                print("\nSe realizó el Deposito Correctamente!!!")
+    def proximasAcciones(self, usuario, tipo, valor):
+        if tipo == 2:
+            print(f"\nVamos a retirar de tu cuenta $ {valor}")
+            retiro = objeto.retirar(usuario[6], tipo, valor)
+
+            if retiro[0] >= 1:
+                print(f'\nSe realizó el retiro de manera Satisfactoria!!')
             else:
-                print("\nNo se logró realizar el Deposito!!!")
+                print('\nNo se logró realizar el retiro correctamente...!!')
+
+        elif tipo == 3:
+            print(f"\nVamos a depositar en tu cuenta $ {valor}")
+            deposito = objeto.depositar(usuario[6], tipo, valor)
+
+            if deposito[0] >= 1:
+                print(f'\nSe realizó el deposito de manera Satisfactoria!!')
+            else:
+                print('\nNo se logró realizar el deposito correctamente...!!')
                 
     def depositar(self, usuario):
         deposito = int(input('Ingresa cantidad a Depositar: '))
-        self.proximasAcciones(usuario[6], 3, deposito)
+        self.proximasAcciones(usuario, 3, deposito)
+
+    def retirar(self, usuario):
+        retiro = int(input('Ingresa cantidad a Retirar: '))
+        self.proximasAcciones(usuario, 2, retiro)
+
+    def movimientos(self, usuario):
+        print("\nTus últimos movimientos son los Siguientes...!!")
+        objeto.consultarMovimientos(usuario[4])
