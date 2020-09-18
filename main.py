@@ -3,10 +3,13 @@
 """
 
 from usuarios import acciones
+from colorama import *
 
-print("\n¡¡Bienvenido al Sistema Bancario BancoCartago!!")
+init()
 
-print("""
+print(Fore.YELLOW + "\n¡¡Bienvenido al Sistema Bancario BancoCartago!!")
+
+print(Fore.CYAN + """
     Acciones Disponibles:
         1. Registrarse
         2. Ingresar

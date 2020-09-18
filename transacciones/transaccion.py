@@ -1,4 +1,8 @@
 import config.conexion as conexion
+import datetime
+import helpers.helpers as encrypt
+
+encriptar = encrypt.Helpers()
 
 connect = conexion.conectar()
 database = connect[0]
@@ -8,8 +12,10 @@ class Transaccion:
 
     def depositar(self, cuenta_id, tipo, valor):
 
-        sql = "INSERT INTO transacciones VALUES (null, %s, %s, %s)"
-        transaccion = (cuenta_id, tipo, valor)
+        fecha = datetime.datetime.now()
+
+        sql = "INSERT INTO transacciones VALUES (null, %s, null, %s, %s, %s)"
+        transaccion = (cuenta_id, tipo, valor, fecha)
 
         try:
             cursor.execute(sql, transaccion)
@@ -24,8 +30,10 @@ class Transaccion:
 
     def retirar(self, cuenta_id, tipo, valor):
 
-        sql = "INSERT INTO transacciones VALUES (null, %s, %s, %s)"
-        transaccion = (cuenta_id, tipo, valor)
+        fecha = datetime.datetime.now()
+
+        sql = "INSERT INTO transacciones VALUES (null, %s, null, %s, %s, %s)"
+        transaccion = (cuenta_id, tipo, valor, fecha)
 
         try:
             cursor.execute(sql, transaccion)
@@ -38,24 +46,48 @@ class Transaccion:
 
         return result
 
-    def obtenerSaldo(self, id_cuenta):
+    def transferencia(self, cuenta_id, remitente, tipo, valor):
+        fecha = datetime.datetime.now()
 
-        sql = "SELECT * FROM cuentas WHERE id = %s"
+        sql = "INSERT INTO transacciones VALUES (null, %s, %s, %s, %s, %s)"
+        transaccion = (cuenta_id, remitente, tipo, valor, fecha)
 
-        cuenta = (id_cuenta)
+        try:
+            cursor.execute(sql, transaccion)
+            database.commit() 
 
-        cursor.execute(sql, cuenta)
-        result = cursor.fetchone()
+            result = [cursor.rowcount]
+
+        except:
+            result = [0]
 
         return result
 
-    def consultarMovimientos(self, numero_cuenta):
-        
-        sql = "SELECT numero_cuenta, monto, tipo FROM cuentas JOIN transacciones ON cuentas.id=transacciones.cuenta_id JOIN tipos_transacciones ON transacciones.tipo_id=tipos_transacciones.id WHERE cuentas.numero_cuenta = %s"
+    def obtenerSaldo(self):
 
-        movimiento = (numero_cuenta)
+        sql = "SELECT id, saldo, numero_cuenta FROM cuentas"
 
-        cursor.execute(sql, movimiento)
+        cursor.execute(sql)
         result = cursor.fetchall()
 
         return result
+
+    def consultarMovimientos(self):
+        
+        sql = "SELECT nombre, apellidos, numero_cuenta, monto, fecha_hora, tipo, cuenta_remitente FROM cuentas JOIN transacciones ON cuentas.id=transacciones.cuenta_id JOIN tipos_transacciones ON transacciones.tipo_id=tipos_transacciones.id JOIN usuarios ON usuarios.cedula=cuentas.usuario_cedula ORDER BY transacciones.id DESC"
+
+        cursor.execute(sql)
+        result = cursor.fetchall()
+
+        return result
+
+    def actualizarSaldo(self, cuenta_id, saldo):
+
+        sql = "UPDATE cuentas SET saldo = %s WHERE id = %s"
+
+        cuenta = (saldo, cuenta_id)
+
+        cursor.execute(sql, cuenta)
+
+        database.commit()
+
